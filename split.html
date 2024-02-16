@@ -133,8 +133,8 @@
     </div>
 
     <div class="h-full">
-        <iframe id="one" src="http://localhost:3001"></iframe>
-        <iframe id="two" src="http://localhost:3000"></iframe>
+        <iframe id="one" src=""></iframe>
+        <iframe id="two" src=""></iframe>
     </div>
 </div>
 <script>
@@ -149,6 +149,9 @@
 
     let host = 'http://localhost:3000';
     let canaryHost = 'http://localhost:3001';
+    console.log(host, one, canaryHost, two)
+    one.src = host;
+    two.src = canaryHost;
     if (window.location.href.indexOf('vercel') > 0) {
       host = 'https://suspense-henna.vercel.app'
       canaryHost = 'https://suspense-canary.vercel.app'

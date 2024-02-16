@@ -61,7 +61,7 @@ export default function App() {
         hasNext: caseId < AllCases.length - 1,
         hasPrev: caseId > 0,
       }),
-      "http://localhost:63342",
+      window.parent.location.origin,
     );
   }, [caseName]);
   useEffect(() => {

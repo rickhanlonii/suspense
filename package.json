@@ -20,7 +20,7 @@
   },
   "scripts": {
     "sync": "chokidar './src/**/*' -c 'rsync -av --delete ./src/ ./canary/src/other-src/'",
-    "start": "react-scripts start",
+    "start": "PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
