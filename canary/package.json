@@ -7,8 +7,8 @@
   "dependencies": {
     "@babel/register": "^7.23.7",
     "prettier": "^3.2.5",
-    "react": "18.3.0-canary-2e470a788-20240214",
-    "react-dom": "file:src/lib/react-dom.development.js",
+    "react": "18.3.0-canary-d7a98a5e9-20230517",
+    "react-dom": "18.3.0-canary-d7a98a5e9-20230517",
     "scheduler": "0.23.0",
     "react-scripts": "5.0.1"
   },
