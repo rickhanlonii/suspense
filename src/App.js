@@ -63,7 +63,7 @@ export default function App() {
       }),
       window.location.host.indexOf("vercel") > 0
         ? "https://suspense-tester.vercel.app"
-        : "https://localhost:3000",
+        : "http://localhost:3000",
     );
   }, [caseName]);
   useEffect(() => {

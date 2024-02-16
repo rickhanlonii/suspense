@@ -126,6 +126,19 @@ export const BetterCase = ({ mountId, start }) => {
   );
 };
 
+export const WorstCase = ({ mountId, start }) => {
+  return (
+    <Boundary fallback={<Fallback />}>
+      <Await id={`child1-${mountId}`} ms={0}>
+        <Boundary fallback={<Fallback />}>
+          <Await id={`child8-${mountId}`} ms={301} start={start}></Await>
+        </Boundary>
+        <Await id={`child9-${mountId}`} ms={100} start={start}></Await>
+      </Await>
+    </Boundary>
+  );
+};
+
 export const Sibling = ({ mountId, start }) => {
   return (
     <Boundary fallback={<Fallback />}>
