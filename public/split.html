@@ -145,6 +145,17 @@
     const next = document.getElementById('next');
     const caseName = document.getElementById('case');
     const event = new Event('iframe-toggle');
+    let host = 'http://localhost:3000';
+    let canaryHost = 'http://localhost:3001';
+
+    one.src = host;
+    two.src = canaryHost;
+    if (window.location.href.indexOf('vercel') > 0) {
+      host = 'https://suspense-tester.vercel.app'
+      canaryHost = 'https://suspense-canary.vercel.app'
+      one.src = host;
+      two.src = canaryHost;
+    }
 
     function splitCamelCase(input) {
       // Regex to find transitions from lower to upper case letters and vice versa
