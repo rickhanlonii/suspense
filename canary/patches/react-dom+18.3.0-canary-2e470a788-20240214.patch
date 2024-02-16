@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-dom/cjs/react-dom.development.js b/node_modules/react-dom/cjs/react-dom.development.js
+index 0964557..686b9e2 100644
+--- a/node_modules/react-dom/cjs/react-dom.development.js
++++ b/node_modules/react-dom/cjs/react-dom.development.js
+@@ -24307,7 +24307,7 @@ var didIncludeCommitPhaseUpdate = false; // The most recent time we either commi
+ // TODO: Think of a better name for this variable?
+ 
+ var globalMostRecentFallbackTime = 0;
+-var FALLBACK_THROTTLE_MS = 300; // The absolute time for when we should start giving up on rendering
++var FALLBACK_THROTTLE_MS = window.FALLBACK_THROTTLE_MS || 500; // The absolute time for when we should start giving up on rendering
+ // more and prefer CPU suspense heuristics instead.
+ 
+ var workInProgressRootRenderTargetTime = Infinity; // How long a render is supposed to take before we start following CPU
+diff --git a/node_modules/react-dom/cjs/react-dom.production.min.js b/node_modules/react-dom/cjs/react-dom.production.min.js
+index f377627..07e2c00 100644
+--- a/node_modules/react-dom/cjs/react-dom.production.min.js
++++ b/node_modules/react-dom/cjs/react-dom.production.min.js
+@@ -106,7 +106,7 @@ l,p,v){cf=0;m=T(m,l,p,v);bf=null;return m}}var pf=hf(!0),qf=hf(!1),rf=ka(null),s
+ function Bf(a){if(22===a.tag){if(F(Af,Af.current),F(xf,a),null===yf){var b=a.alternate;null!==b&&null!==b.memoizedState&&(yf=a)}}else Cf(a)}function Cf(){F(Af,Af.current);F(xf,xf.current)}function Df(a){E(xf);yf===a&&(yf=null);E(Af)}var Af=ka(0);
+ function Ef(a){for(var b=a;null!==b;){if(13===b.tag){var c=b.memoizedState;if(null!==c&&(c=c.dehydrated,null===c||"$?"===c.data||"$!"===c.data))return b}else if(19===b.tag&&void 0!==b.memoizedProps.revealOrder){if(0!==(b.flags&128))return b}else if(null!==b.child){b.child.return=b;b=b.child;continue}if(b===a)break;for(;null===b.sibling;){if(null===b.return||b.return===a)return null;b=b.return}b.sibling.return=b.return;b=b.sibling}return null}
+ var Ff=da.ReactCurrentDispatcher,Gf=da.ReactCurrentBatchConfig,Hf=0,P=null,Q=null,R=null,If=!1,Jf=!1,Kf=!1,Lf=0,Mf=0,Nf=null,Of=0;function Pf(){throw Error(t(321));}function Qf(a,b){if(null===b)return!1;for(var c=0;c<b.length&&c<a.length;c++)if(!hd(a[c],b[c]))return!1;return!0}function Rf(a,b,c,d,e,f){Hf=f;P=b;b.memoizedState=null;b.updateQueue=null;b.lanes=0;Ff.current=null===a||null===a.memoizedState?Sf:Tf;Kf=!1;a=c(d,e);Kf=!1;Jf&&(a=Uf(b,c,d,e));Vf();return a}
+-function Vf(){Ff.current=Wf;var a=null!==Q&&null!==Q.next;Hf=0;R=Q=P=null;If=!1;Mf=0;Nf=null;if(a)throw Error(t(300));}function Uf(a,b,c,d){P=a;var e=0;do{Jf&&(Nf=null);Mf=0;Jf=!1;if(25<=e)throw Error(t(301));e+=1;R=Q=null;a.updateQueue=null;Ff.current=Xf;var f=b(c,d)}while(Jf);return f}function Yf(){var a=Ff.current.useState()[0];return"function"===typeof a.then?Zf(a):a}function $f(){var a=0!==Lf;Lf=0;return a}function ag(a,b,c){b.updateQueue=a.updateQueue;b.flags&=-2053;a.lanes&=~c}
++function Vf(){Ff.current=Wf;var a=null!==Q&&null!==Q.next;Hf=0;R=Q=P=null;If=!1;Mf=0;Nf=null;if(a)throw Error(t(window.FALLBACK_THROTTLE_MS || 300));}function Uf(a,b,c,d){P=a;var e=0;do{Jf&&(Nf=null);Mf=0;Jf=!1;if(25<=e)throw Error(t(301));e+=1;R=Q=null;a.updateQueue=null;Ff.current=Xf;var f=b(c,d)}while(Jf);return f}function Yf(){var a=Ff.current.useState()[0];return"function"===typeof a.then?Zf(a):a}function $f(){var a=0!==Lf;Lf=0;return a}function ag(a,b,c){b.updateQueue=a.updateQueue;b.flags&=-2053;a.lanes&=~c}
+ function bg(a){if(If){for(a=a.memoizedState;null!==a;){var b=a.queue;null!==b&&(b.pending=null);a=a.next}If=!1}Hf=0;R=Q=P=null;Jf=!1;Mf=Lf=0;Nf=null}function cg(){var a={memoizedState:null,baseState:null,baseQueue:null,queue:null,next:null};null===R?P.memoizedState=R=a:R=R.next=a;return R}
+ function dg(){if(null===Q){var a=P.alternate;a=null!==a?a.memoizedState:null}else a=Q.next;var b=null===R?P.memoizedState:R.next;if(null!==b)R=b,Q=a;else{if(null===a){if(null===P.alternate)throw Error(t(467));throw Error(t(310));}Q=a;a={memoizedState:Q.memoizedState,baseState:Q.baseState,baseQueue:Q.baseQueue,queue:Q.queue,next:null};null===R?P.memoizedState=R=a:R=R.next=a}return R}var eg;eg=function(){return{lastEffect:null,events:null,stores:null}};
+ function Zf(a){var b=Mf;Mf+=1;null===Nf&&(Nf=[]);a=Ze(Nf,a,b);null===P.alternate&&(null===R?null===P.memoizedState:null===R.next)&&(Ff.current=Sf);return a}function fg(a){if(null!==a&&"object"===typeof a){if("function"===typeof a.then)return Zf(a);if(a.$$typeof===sa)return gg(a)}throw Error(t(438,String(a)));}function hg(a,b){return"function"===typeof b?b(a):b}function ig(a){var b=dg();return jg(b,Q,a)}
