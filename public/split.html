@@ -133,8 +133,8 @@
     </div>
 
     <div class="h-full">
-        <iframe id="one" src="http://localhost:3001"></iframe>
-        <iframe id="two" src="http://localhost:3000"></iframe>
+        <iframe id="one" src="http://localhost:3000"></iframe>
+        <iframe id="two" src="http://localhost:3001"></iframe>
     </div>
 </div>
 <script>
@@ -165,8 +165,8 @@
     }
 
     function sendEvent(event) {
-      one.contentWindow.postMessage(JSON.stringify(event), 'http://localhost:3001');
-      two.contentWindow.postMessage(JSON.stringify(event), 'http://localhost:3000');
+      one.contentWindow.postMessage(JSON.stringify(event), host);
+      two.contentWindow.postMessage(JSON.stringify(event), canaryHost);
     }
     button.addEventListener('click', () => {
       sendEvent({type: 'toggle'});
