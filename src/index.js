@@ -1,4 +1,4 @@
-import { createRoot } from "./lib/react-dom.development";
+import { createRoot } from "react-dom/client";
 
 import App from "./App";
 
