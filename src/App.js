@@ -61,7 +61,9 @@ export default function App() {
         hasNext: caseId < AllCases.length - 1,
         hasPrev: caseId > 0,
       }),
-      window.parent.location.origin,
+      window.location.host.indexOf("vercel") > 0
+        ? "https://suspense-henna.vercel.app"
+        : "https://localhost:3000",
     );
   }, [caseName]);
   useEffect(() => {
