@@ -144,8 +144,8 @@
     </div>
 
     <div class="h-full">
-        <iframe id="one" src="http://localhost:3000"></iframe>
-        <iframe id="two" src="http://localhost:3001"></iframe>
+        <iframe id="one" src=""></iframe>
+        <iframe id="two" src=""></iframe>
     </div>
 </div>
 <script>
@@ -159,19 +159,19 @@
     const range = document.getElementById('range');
     const caseName = document.getElementById('case');
     const event = new Event('iframe-toggle');
-    let host = 'http://localhost:3000';
-    let canaryHost = 'http://localhost:3001';
+    let host;
+    let canaryHost;
 
-    one.src = host;
-    two.src = canaryHost;
     if (window.location.href.indexOf('vercel') > 0) {
       host = 'https://suspense-tester.vercel.app'
       canaryHost = 'https://suspense-canary.vercel.app'
-      one.src = host;
-      two.src = canaryHost;
+    } else {
+      host = 'http://localhost:3000';
+      canaryHost = 'http://localhost:3001';
     }
 
-
+    one.src = host;
+    two.src = canaryHost;
 
     function splitCamelCase(input) {
       // Regex to find transitions from lower to upper case letters and vice versa
