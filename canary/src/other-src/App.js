@@ -62,7 +62,7 @@ export default function App() {
         hasPrev: caseId > 0,
       }),
       window.location.host.indexOf("vercel") > 0
-        ? "https://suspense-henna.vercel.app"
+        ? "https://suspense-tester.vercel.app"
         : "https://localhost:3000",
     );
   }, [caseName]);
