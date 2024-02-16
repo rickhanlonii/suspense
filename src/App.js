@@ -1,49 +1,10 @@
 import * as React from "react";
-import { useLayoutEffect, useState, useEffect } from "react";
+import { useLayoutEffect, useState, useEffect, createContext } from "react";
 import "./styles.css";
 import * as Cases from "./Cases";
+import { resetCache } from "./components";
 
-import { Await, Fallback, Boundary } from "./components";
-
-// export default function App() {
-//   const [mountId, setMountId] = useState(0);
-//   return (
-//     <div className="p-10">
-//       <button
-//         className="mb-8 bg-blue-500 hover:bg-blue-400 active:bg-blue-600 color-white py-1 px-2 rounded"
-//         onClick={() => setMountId((m) => m + 1)}
-//       >
-//         Toggle
-//       </button>
-//       <div className="border-gray-200 border rounded p-2" key={mountId}>
-//         <Suspense fallback={<Fallback />}>
-//           <Await id={`parent-${mountId}`} ms={3000} />
-//           <Suspense fallback={<Fallback />}>
-//             <Await id={`sibling-${mountId}`} ms={0} />
-//           </Suspense>
-//         </Suspense>
-//       </div>
-
-//     </div>
-//   );
-// }
-
-// export default function App() {
-//   const [mountId, setMountId] = useState(0);
-//   return (
-//     <div className="p-10">
-//       <button
-//         className="mb-8 bg-blue-500 hover:bg-blue-400 active:bg-blue-600 color-white py-1 px-2 rounded"
-//         onClick={() => setMountId((m) => m + 1)}
-//       >
-//         Toggle
-//       </button>
-//       <div className="border-gray-200 border rounded p-2" key={mountId}>
-//
-//       </div>
-//     </div>
-//   );
-// }
+export const StartContext = createContext(0);
 
 export default function App() {
   const [mountId, setMountId] = useState(0);
@@ -72,11 +33,14 @@ export default function App() {
       if (typeof data === "string" && data[0] === "{") {
         const messageData = JSON.parse(data);
         if (messageData.type === "toggle") {
+          resetCache();
           setMountId((c) => c + 1);
         } else if (messageData.type === "prev") {
+          resetCache();
           setMountId((c) => c + 1);
           setCaseId((c) => (c === 0 ? 0 : c - 1));
         } else if (messageData.type === "next") {
+          resetCache();
           setMountId((c) => c + 1);
           setCaseId((c) =>
             c === AllCases.length - 1 ? AllCases.length - 1 : c + 1,
@@ -93,9 +57,11 @@ export default function App() {
   }, [mountId]);
   return (
     <div key={caseId} className="p-10">
-      <div className="border-gray-200 border rounded p-2 pb-1" key={mountId}>
-        <Module mountId={`${mountId}-${caseId}`} start={start} />
-      </div>
+      <StartContext.Provider value={start}>
+        <div className="border-gray-200 border rounded p-2 pb-1" key={mountId}>
+          <Module start={start} />
+        </div>
+      </StartContext.Provider>
     </div>
   );
 }

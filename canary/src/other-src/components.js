@@ -1,8 +1,11 @@
-import { Suspense, useLayoutEffect, useState } from "react";
+import { Suspense, useContext, useLayoutEffect, useRef, useState } from "react";
 import * as React from "react";
+import { StartContext } from "./App";
 
-const cache = new Map();
-
+let cache = new Map();
+export const resetCache = () => {
+  cache = new Map();
+};
 function suspend(id, ms) {
   const record = cache.get(id);
   if (record) {
@@ -26,7 +29,8 @@ function suspend(id, ms) {
   throw promise;
 }
 
-export function Await({ id, ms, start, children }) {
+export function Await({ id, ms, children }) {
+  const start = useContext(StartContext);
   const [end, setEnd] = useState(0);
   useLayoutEffect(() => {
     setEnd(new Date().getTime());
@@ -35,14 +39,26 @@ export function Await({ id, ms, start, children }) {
 
   return (
     <div className="flex min-w-48 bg-wash-dark text-primary-dark flex-col min-h-24 border border-solid border-gray-70 rounded pb-1 p-2 mb-1">
-      <span>Resolved after {ms}ms</span>
-      {start && <span> Took {end - start} ms</span>}
+      <div className="flex justify-between">
+        <span>Suspend for {ms}ms</span>
+        <span className="text-gray-600">Shown after {end - start} ms</span>
+      </div>
       <div>{children}</div>
     </div>
   );
 }
 
-export function Fallback() {
+export function Fallback({ onStart, onEnd }) {
+  console.log("fallback");
+  useLayoutEffect(() => {
+    console.log("fb shown");
+    onStart(new Date().getTime());
+
+    return () => {
+      console.log("fb hide");
+      onEnd(new Date().getTime());
+    };
+  }, []);
   return (
     <div className="flex bg-wash-dark w-full flex-col h-auto border border-solid border-gray-70 rounded p-2">
       <div>
@@ -70,10 +86,57 @@ export function Fallback() {
 }
 
 export function Boundary({ fallback, children }) {
+  const mountStart = useContext(StartContext);
+  const start = useRef();
+  if (!start.current) {
+    start.current = new Date().getTime();
+  }
+  const [end, setEnd] = useState(new Date().getTime());
+  const [fallbackStart, setFallbackStart] = useState(null);
+  const [fallbackEnd, setFallbackEnd] = useState(null);
+  useLayoutEffect(() => {
+    setEnd(new Date().getTime());
+  }, []);
+
+  const fallbackShown = fallbackStart && fallbackStart > 0;
+  const bgColor = fallbackShown ? "bg-red-30" : "bg-gray-600";
+  const textColor = fallbackShown ? "text-primary-dark" : "text-primary-dark";
   return (
-    <div className="bg-red-30 pb-1 p-1 rounded">
-      <span className="text-primary-dark">Boundary</span>
-      <Suspense fallback={fallback}>{children}</Suspense>
+    <div className={`pb-1 p-1 mb-2 last:mb-0 rounded ${bgColor}`}>
+      <div className="flex justify-between">
+        <span className={textColor}>
+          Boundary{" "}
+          <span>
+            {start.current
+              ? `@ ${start.current - mountStart > 0 ? start.current - mountStart : 0}ms`
+              : "not shown"}
+          </span>
+        </span>
+        <div>
+          {/*<span className="text-gray-20 mr-2">*/}
+          {/*  {!fallbackShown && end - start.current > 0*/}
+          {/*    ? `Wait in parent: ${end - start.current}ms`*/}
+          {/*    : ""}*/}
+          {/*</span>*/}
+          <span className="text-gray-20 mr-2">
+            {fallbackStart ? `Fallback @ ${fallbackStart - mountStart}ms` : ""}
+          </span>
+
+          <span className="text-gray-20">
+            {fallbackEnd ? `${fallbackEnd - fallbackStart}ms` : ""}
+          </span>
+        </div>
+      </div>
+      <Suspense
+        fallback={
+          <Fallback
+            onStart={(time) => setFallbackStart(time)}
+            onEnd={(time) => setFallbackEnd(time)}
+          />
+        }
+      >
+        {children}
+      </Suspense>
     </div>
   );
 }
