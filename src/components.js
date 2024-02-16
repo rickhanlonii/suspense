@@ -113,11 +113,11 @@ export function Boundary({ fallback, children }) {
           </span>
         </span>
         <div>
-          {/*<span className="text-gray-20 mr-2">*/}
-          {/*  {!fallbackShown && end - start.current > 0*/}
-          {/*    ? `Wait in parent: ${end - start.current}ms`*/}
-          {/*    : ""}*/}
-          {/*</span>*/}
+          <span className="text-gray-20 mr-2">
+            {!fallbackShown && end - start.current > 10
+              ? `Delay commit: ${end - start.current}ms`
+              : ""}
+          </span>
           <span className="text-gray-20 mr-2">
             {fallbackStart ? `Fallback @ ${fallbackStart - mountStart}ms` : ""}
           </span>
