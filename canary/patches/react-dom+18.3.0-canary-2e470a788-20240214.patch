@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-dom/cjs/react-dom.development.js b/node_modules/react-dom/cjs/react-dom.development.js
-index 0964557..9fbd9d3 100644
+index 0964557..1d6a6f4 100644
 --- a/node_modules/react-dom/cjs/react-dom.development.js
 +++ b/node_modules/react-dom/cjs/react-dom.development.js
 @@ -24307,7 +24307,7 @@ var didIncludeCommitPhaseUpdate = false; // The most recent time we either commi
@@ -20,12 +20,77 @@ index 0964557..9fbd9d3 100644
  
        if (msUntilTimeout > 10) {
          markRootSuspended(root, lanes, workInProgressDeferredLane);
-@@ -26795,7 +26795,7 @@ function pingSuspendedRoot(root, wakeable, pingedLanes) {
+@@ -26048,10 +26048,29 @@ function completeUnitOfWork(unitOfWork) {
+ 
+   do {
+     {
+-      if ((completedWork.flags & Incomplete) !== NoFlags$1) {
+-        // NOTE: If we re-enable sibling prerendering in some cases, this branch
+-        // is where we would switch to the unwinding path.
+-        error('Internal React error: Expected this fiber to be complete, but ' + "it isn't. It should have been unwound. This is a bug in React.");
++      if (window.REVERT_SIBLING_RENDER) {
++        if ((completedWork.flags & Incomplete) !== NoFlags) {
++          // This fiber did not complete, because one of its children did not
++          // complete. Switch to unwinding the stack instead of completing it.
++          //
++          // The reason "unwind" and "complete" is interleaved is because when
++          // something suspends, we continue rendering the siblings even though
++          // they will be replaced by a fallback.
++          // TODO: Disable sibling prerendering, then remove this branch.
++          unwindUnitOfWork(completedWork);
++          return;
++        }
++      } else {
++        if (true) {
++          if ((completedWork.flags & Incomplete) !== NoFlags) {
++            // NOTE: If we re-enable sibling prerendering in some cases, this branch
++            // is where we would switch to the unwinding path.
++            console.error(
++              'Internal React error: Expected this fiber to be complete, but ' +
++              "it isn't. It should have been unwound. This is a bug in React.",
++            );
++          }
++        }
+       }
+     } // The current, flushed, state of this fiber is the alternate. Ideally
+     // nothing should rely on this, but relying on it here means that we don't
+@@ -26795,7 +26814,7 @@ function pingSuspendedRoot(root, wakeable, pingedLanes) {
      // we should probably never restart.
      // If we're suspended with delay, or if it's a retry, we'll always suspend
      // so we can always restart.
 -    if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now$1() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS) {
 +    if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now$1() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS()) {
+       // Force a restart from the root by unwinding the stack. Unless this is
+       // being called from the render phase, because that would cause a crash.
+       if ((executionContext & RenderContext) === NoContext) {
+diff --git a/node_modules/react-dom/cjs/react-dom.production.js b/node_modules/react-dom/cjs/react-dom.production.js
+index d8847cc..77ccf9e 100644
+--- a/node_modules/react-dom/cjs/react-dom.production.js
++++ b/node_modules/react-dom/cjs/react-dom.production.js
+@@ -16870,7 +16870,7 @@ let didIncludeCommitPhaseUpdate = false; // The most recent time we either commi
+ // TODO: Think of a better name for this variable?
+ 
+ let globalMostRecentFallbackTime = 0;
+-const FALLBACK_THROTTLE_MS = 300; // The absolute time for when we should start giving up on rendering
++const FALLBACK_THROTTLE_MS = function() { return window.FALLBACK_THROTTLE_MS || 500; } // The absolute time for when we should start giving up on rendering
+ // more and prefer CPU suspense heuristics instead.
+ 
+ let workInProgressRootRenderTargetTime = Infinity; // How long a render is supposed to take before we start following CPU
+@@ -17306,7 +17306,7 @@ function finishConcurrentRender(root, exitStatus, finishedWork, lanes) {
+     if (includesOnlyRetries(lanes) && (alwaysThrottleRetries )) {
+       // This render only included retries, no updates. Throttle committing
+       // retries so that we don't show too many loading states too quickly.
+-      const msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS - now(); // Don't bother with a very short suspense time.
++      const msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS() - now(); // Don't bother with a very short suspense time.
+ 
+       if (msUntilTimeout > 10) {
+         markRootSuspended(root, lanes, workInProgressDeferredLane);
+@@ -18989,7 +18989,7 @@ function pingSuspendedRoot(root, wakeable, pingedLanes) {
+     // we should probably never restart.
+     // If we're suspended with delay, or if it's a retry, we'll always suspend
+     // so we can always restart.
+-    if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS) {
++    if (workInProgressRootExitStatus === RootSuspendedWithDelay || workInProgressRootExitStatus === RootSuspended && includesOnlyRetries(workInProgressRootRenderLanes) && now() - globalMostRecentFallbackTime < FALLBACK_THROTTLE_MS()) {
        // Force a restart from the root by unwinding the stack. Unless this is
        // being called from the render phase, because that would cause a crash.
        if ((executionContext & RenderContext) === NoContext) {
