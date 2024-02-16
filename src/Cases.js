@@ -1,14 +1,6 @@
 import { Await, Boundary, Fallback } from "./components";
 import * as React from "react";
 
-export const Fallbacks = ({ mountId, start }) => {
-  return (
-    <Boundary fallback={<Fallback />}>
-      <Fallback />
-    </Boundary>
-  );
-};
-
 export const SingleBoundaryInstant = ({ mountId, start }) => {
   return (
     <Boundary fallback={<Fallback />}>
