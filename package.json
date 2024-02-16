@@ -1,0 +1,34 @@
+{
+  "name": "react",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "prettier": "^3.2.5",
+    "react": "18.2.0",
+    "react-dom": "file:./lib/react-dom.development.js",
+    "scheduler": "0.23.0",
+    "react-scripts": "5.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.38",
+    "@types/react-dom": "18.2.15",
+    "chokidar-cli": "^3.0.0",
+    "loader-utils": "3.2.1",
+    "typescript": "4.4.4"
+  },
+  "scripts": {
+    "sync": "chokidar './src/**/*' -c 'rsync -av --delete ./src/ ./canary/src/other-src/'",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
